@@ -4,6 +4,7 @@ namespace App\Http;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response as LaravelResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -126,7 +127,6 @@ class Response implements Responsable
             'message' =>  $message,
             'data'    =>  $data,
         ];
-
         switch (true){
             case $data instanceof Model:
                 /** @var Model $data */
@@ -152,6 +152,11 @@ class Response implements Responsable
                 $data = $data->getCollection();
 
                 $response['data']= $data->toArray();
+                break;
+            case $data instanceof JsonResource:
+                /** @var JsonResource $data */
+                $data = $data->response();
+                $response['data'] = $data->getData(true);
         }
 
         return $response;
