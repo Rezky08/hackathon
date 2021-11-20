@@ -28,6 +28,9 @@ Route::middleware(['auth:sanctum'])->group(function (){
 
     Route::group(['prefix'=>'sayembara'],function (){
         Route::post('/',[\App\Http\Controllers\Sayembara\SayembaraController::class,'createNewSayembara']);
+        Route::group(['prefix'=>'present'],function (){
+            Route::get('type',[\App\Http\Controllers\Sayembara\PresentController::class,'getPresentType']);
+        });
     });
 
     Route::group(['prefix'=>'geo'],function (){

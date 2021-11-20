@@ -127,6 +127,10 @@ class Response implements Responsable
                 /** @var Model $data */
                 $response['data'] = $data->toArray();
                 break;
+            case $data instanceof Collection:
+                /** @var Collection $data */
+                $response['data'] = $data->toArray();
+                break;
             case $data instanceof LengthAwarePaginator:
                 /** @var LengthAwarePaginator $data */
                 $paginationOptions = [
