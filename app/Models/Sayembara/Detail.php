@@ -43,6 +43,13 @@ class Detail extends Model
         'limit'
     ];
 
+    public $hidden = [
+        'id',
+        'sayembara_id',
+        'created_at',
+        'updated_at'
+    ];
+
     public $casts = [
         'limit'=> LimitCast::class
     ];

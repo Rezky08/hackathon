@@ -71,27 +71,27 @@ class Handler extends ExceptionHandler
         if ($request->expectsJson()){
             switch (true){
                 case $e instanceof ValidationException:
-                    $e = new Error(Response::CODE_ERROR_INVALID_DATA,$e->errors(),$e);
+                    $e = Error::make(Response::CODE_ERROR_INVALID_DATA,$e->errors());
                     break;
                 case $e instanceof AuthenticationException:
-                    $e = new Error(Response::CODE_ERROR_UNAUTHENTICATED,$data);
+                    $e = Error::make(Response::CODE_ERROR_UNAUTHENTICATED,$data);
                     break;
                 case $e instanceof ModelNotFoundException:
-                    $e = new Error(Response::CODE_ERROR_RESOURCE_NOT_FOUND,$data,$e);
+                    $e = Error::make(Response::CODE_ERROR_RESOURCE_NOT_FOUND,$data,$e);
                     break;
                 case $e instanceof \ArgumentCountError:
-                    $e = new Error(Response::CODE_ERROR,$data);
+                    $e = Error::make(Response::CODE_ERROR,$data);
                     break;
                 case $e instanceof HttpException:
                     switch ($e->getStatusCode()){
                         case LaravelResponse::HTTP_NOT_FOUND:
-                            $e = new Error(Response::CODE_ERROR_ROUTE_NOT_FOUND,$data);
+                            $e = Error::make(Response::CODE_ERROR_ROUTE_NOT_FOUND,$data);
                             break;
                         case LaravelResponse::HTTP_UNAUTHORIZED:
-                            $e = new Error(Response::CODE_ERROR_UNAUTHENTICATED,$data);
+                            $e = Error::make(Response::CODE_ERROR_UNAUTHENTICATED,$data);
                             break;
                         case LaravelResponse::HTTP_FORBIDDEN:
-                            $e = new Error(Response::CODE_ERROR_UNAUTHORIZED,$data);
+                            $e = Error::make(Response::CODE_ERROR_UNAUTHORIZED,$data);
                             break;
                     }
             }

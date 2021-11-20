@@ -55,7 +55,7 @@ class UpdateExistingSayembara
             }
             $this->sayembara->save();
 
-            throw_if(!$this->sayembara->exists,new Error(Response::CODE_ERROR_DATABASE_TRANSACTION));
+            throw_if(!$this->sayembara->exists,Error::make(Response::CODE_ERROR_DATABASE_TRANSACTION));
 
             dispatch($this->sayembaraDetailJob);
 
@@ -67,7 +67,7 @@ class UpdateExistingSayembara
 
         }catch (\Exception $e){
             DB::rollBack();
-            throw new Error(Response::CODE_ERROR_DATABASE_TRANSACTION,[],$e);
+            throw Error::make(Response::CODE_ERROR_DATABASE_TRANSACTION,[],$e);
         }
 
         return $this->sayembara->exists;

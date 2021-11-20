@@ -15,7 +15,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class UpdateDetailExistingSayembara implements ShouldQueue
+class UpdateDetailExistingSayembara
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -74,7 +74,7 @@ class UpdateDetailExistingSayembara implements ShouldQueue
 
         $this->sayembaraDetail->save();
 
-        throw_if(!$this->sayembaraDetail->exists,new Error(Response::CODE_ERROR_DATABASE_TRANSACTION));
+        throw_if(!$this->sayembaraDetail->exists,Error::make(Response::CODE_ERROR_DATABASE_TRANSACTION));
 
         return $this->sayembaraDetail->exists;
     }

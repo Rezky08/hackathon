@@ -31,7 +31,7 @@ class CreateSayembaraDetailTable extends Migration
             $table->json('limit')->nullable();
             $table->timestamps();
             $table->foreign('thumbnail')->references('id')->on('attachments')->cascadeOnDelete();
-            $table->foreign('sayembara_id')->references('id')->on('sayembaras')->cascadeOnDelete();
+            $table->foreign('sayembara_id')->references('id')->on('sayembaras')->nullOnDelete();
             $table->foreign('province_id')->references('id')->on('provinces')->nullOnDelete();
             $table->foreign('city_id')->references('id')->on('cities')->nullOnDelete();
             $table->foreign('district_id')->references('id')->on('districts')->nullOnDelete();

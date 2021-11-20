@@ -85,7 +85,7 @@ class CreateNewDetailSayembara
         $dataInsertSayembaraDetail = collect($this->attributes)->only($availableColumns);
         $this->sayembara->detail()->create($dataInsertSayembaraDetail->toArray());
 
-        throw_if(!$this->sayembara->detail->exists,new Error(Response::CODE_ERROR_DATABASE_TRANSACTION));
+        throw_if(!$this->sayembara->detail->exists,Error::make(Response::CODE_ERROR_DATABASE_TRANSACTION));
 
         return $this->sayembara->detail->exists;
 
