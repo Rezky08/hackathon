@@ -5,6 +5,7 @@ namespace App\Jobs\Sayembara;
 use App\Events\Sayembara\NewSayembaraCreated;
 use App\Exceptions\Error;
 use App\Http\Response;
+use App\Jobs\Sayembara\Detail\CreateNewDetailSayembara;
 use App\Models\Sayembara;
 use App\Models\Sayembara\Detail;
 use App\Models\User;
@@ -30,22 +31,22 @@ class CreateNewSayembara
      */
     public array $attributes;
 
+    /**
+     * @var array
+     */
+    public array $sayembaraDetailAttributes;
+
+    /**
+     * @var CreateNewDetailSayembara
+     */
+    public CreateNewDetailSayembara $sayembaraDetailJob;
+
     /** @var Sayembara  */
     public Sayembara $sayembara;
 
-    /** @var Detail  */
-    public Detail $sayembaraDetail;
 
     /** @var User|\Illuminate\Contracts\Auth\Authenticatable|null  */
     public Authenticatable $user;
-
-
-    const ATTRIBUTE_MAP = [
-        'province'=>'province_id',
-        'city'=>'city_id',
-        'district'=>'district_id',
-        'sub_district'=>'sub_district_id',
-        ];
 
     /**
      * Create a new job instance.
@@ -56,33 +57,14 @@ class CreateNewSayembara
     {
         $this->user = Auth::user();
         $this->sayembara = new Sayembara();
-        $this->sayembaraDetail = new Detail();
         $rules = [
             'start_date'=>['required','date'],
             'end_date'=>['required','date'],
-            'province'=>['required','filled','exists:provinces,id'],
-            'city'=>['required','filled','exists:cities,id'],
-            'district'=>['nullable','exists:districts,id'],
-            'sub_district'=>['nullable','exists:sub_districts,id'],
-            'thumbnail'=>['nullable','exists:attachments,id'],
-            'title'=>['required','filled'],
-            'present_type'=>['required','filled',Rule::in(Detail::getAvaliablePresentType())],
-            'present_value' =>['required','filled'/*Todo: add validation when present_type is money*/],
-            'category'=>['required','filled','exists:sayembara_categories,name'],
-            'max_participant' => ['required','filled','numeric'],
-            'max_winner' => ['required','filled','numeric'],
-            'content' => ['required','filled'],
-            'limit' => ['nullable','array'],
-            'limit.'.Detail::LIMIT_AGE  =>['filled','array'],
-            'limit.'.Detail::LIMIT_AGE.'.min'  =>['filled','numeric'],
-            'limit.'.Detail::LIMIT_AGE.'.max'  =>['filled','numeric'],
-            'limit.'.Detail::LIMIT_GEO  =>['filled','array'],
-            'limit.'.Detail::LIMIT_GEO.'.*'  =>['filled','array','min:1'],
-            'limit'.Detail::LIMIT_GENDER    =>['filled','array','min:1']
+            'is_open'=>['nullable','bool'],
         ];
         $this->attributes = Validator::make($attributes,$rules)->validate();
+        $this->sayembaraDetailJob = new CreateNewDetailSayembara($this->sayembara,$attributes);
 
-        $this->attributes['is_open'] = true;
         $this->attributes['user_id'] = $this->user->id;
 
     }
@@ -95,15 +77,6 @@ class CreateNewSayembara
     public function handle()
     {
 
-        /** value mapping */
-        foreach ($this->attributes as $key => $value){
-            if (array_key_exists($key,self::ATTRIBUTE_MAP)){
-                $this->attributes[self::ATTRIBUTE_MAP[$key]] = $value;
-                unset($this->attributes[$key]);
-            }
-        }
-        /** end value mapping */
-
         $availableColumns = Sayembara::getTableColumns();
         $dataInsertSayembara = collect($this->attributes)->only($availableColumns);
 
@@ -115,12 +88,9 @@ class CreateNewSayembara
 
             throw_if(!$this->sayembara->exists,new Error(Response::CODE_ERROR_DATABASE_TRANSACTION));
 
-            $availableColumns = Detail::getTableColumns();
-            $dataInsertSayembaraDetail = collect($this->attributes)->only($availableColumns);
-            $this->sayembara->detail()->create($dataInsertSayembaraDetail->toArray());
+            $this->sayembaraDetailJob->sayembara = $this->sayembara;
 
-            throw_if(!$this->sayembara->detail->exists,new Error(Response::CODE_ERROR_DATABASE_TRANSACTION));
-
+            dispatch($this->sayembaraDetailJob);
 
             event(new NewSayembaraCreated($this->sayembara));
 
