@@ -125,7 +125,7 @@ class GeoSeeder extends Seeder
 
         $dataCollection = collect($data);
         $dataCollection = $dataCollection->filter();
-        if (City::query()->count() === $dataCollection->count())
+        if (SubDistrict::query()->count() === $dataCollection->count())
             return true;
         $this->command->info('SubDistrict seeding');
         foreach ($data as $value){
