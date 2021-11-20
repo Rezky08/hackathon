@@ -17,6 +17,9 @@ class SayembaraResource extends JsonResource
     {
         /** @var Sayembara $data */
         $data = $this->resource;
+        if (!$data->relationLoaded('detail')){
+            $data->load('detail');
+        }
         $data = $data->toArray();
         $data = array_merge($data,$data['detail']);
         unset($data['detail']);

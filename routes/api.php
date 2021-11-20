@@ -27,9 +27,14 @@ Route::middleware(['auth:sanctum'])->group(function (){
     });
 
     Route::group(['prefix'=>'sayembara'],function (){
+
         Route::post('/',[\App\Http\Controllers\Sayembara\SayembaraController::class,'createNewSayembara']);
         Route::put('/{sayembara_id}',[\App\Http\Controllers\Sayembara\SayembaraController::class,'updateExistingSayembara']);
         Route::delete('/{sayembara_id}',[\App\Http\Controllers\Sayembara\SayembaraController::class,'deleteExistingSayembara']);
+
+        Route::group(['prefix'=>'{sayembara_id}/status'],function (){
+           Route::put('/',[\App\Http\Controllers\Sayembara\SayembaraController::class,'setExistingSayembaraStatus']);
+        });
 
         Route::group(['prefix'=>'category'],function (){
            Route::get('/',[\App\Http\Controllers\Sayembara\CategoryController::class,'index']);
