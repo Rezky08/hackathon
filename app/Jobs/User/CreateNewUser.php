@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\User;
 
 use App\Events\NewUserCreated;
 use App\Exceptions\Error;
