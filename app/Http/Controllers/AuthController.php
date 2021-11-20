@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\AccountAuthentication;
 use App\Http\Response;
-use App\Jobs\CreateNewUser;
+use App\Jobs\User\CreateNewUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 

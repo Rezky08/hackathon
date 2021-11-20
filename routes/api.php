@@ -18,11 +18,29 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix'=>'user','middleware'=>'auth:sanctum'],function (){
-   Route::get("/",[\App\Http\Controllers\AuthController::class,'index']);
-   Route::put("/",[\App\Http\Controllers\AuthController::class,'update']);
-   Route::delete("/",[\App\Http\Controllers\AuthController::class,'destroy']);
+Route::middleware(['auth:sanctum'])->group(function (){
+
+    Route::group(['prefix'=>'user'],function (){
+        Route::get("/",[\App\Http\Controllers\AuthController::class,'index']);
+        Route::put("/",[\App\Http\Controllers\AuthController::class,'update']);
+        Route::delete("/",[\App\Http\Controllers\AuthController::class,'destroy']);
+    });
+
+    Route::group(['prefix'=>'sayembara'],function (){
+        Route::post('/',[\App\Http\Controllers\Sayembara\SayembaraController::class,'createNewSayembara']);
+    });
+
+    Route::group(['prefix'=>'geo'],function (){
+        Route::get('/province',[\App\Http\Controllers\Geo\ProvinceController::class,'index']);
+        Route::get('/city',[\App\Http\Controllers\Geo\CityController::class,'index']);
+        Route::get('/district',[\App\Http\Controllers\Geo\DistrictController::class,'index']);
+        Route::get('/subdistrict',[\App\Http\Controllers\Geo\SubDistrictController::class,'index']);
+    });
+
 });
+
+
+
 
 Route::group(['prefix'=>'auth'],function (){
     Route::post('/login',[\App\Http\Controllers\AuthController::class,'login']);
