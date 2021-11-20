@@ -16,7 +16,7 @@ class CreateSayembaraTable extends Migration
         Schema::create('sayembaras', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-            $table->boolean('is_open')->default(false);
+            $table->boolean('is_open')->default(true);
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->timestamps();

@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+    public $table = 'sayembara_categories';
+    public $hidden = [
+        'is_active',
+        'updated_at',
+        'created_at',
+    ];
 }

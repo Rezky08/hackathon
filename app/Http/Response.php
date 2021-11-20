@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 class Response implements Responsable
 {
     const CODE_SUCCESS = '000';
+    const CODE_DATA_CREATED = '001';
 
     const CODE_TIMEOUT = '111';
 
@@ -22,12 +23,16 @@ class Response implements Responsable
 
     const CODE_ERROR_ROUTE_NOT_FOUND = '503';
     const CODE_ERROR_RESOURCE_NOT_FOUND = '504';
+    const CODE_ERROR_DATABASE_TRANSACTION = '505';
 
     const CODE_UNDEFINED_RESPONSE = '999';
 
     const RESPONSE_GROUP = [
         LaravelResponse::HTTP_OK => [
             self::CODE_SUCCESS
+        ],
+        LaravelResponse::HTTP_CREATED => [
+            self::CODE_DATA_CREATED
         ],
         LaravelResponse::HTTP_UNAUTHORIZED => [
             self::CODE_ERROR_UNAUTHORIZED,
@@ -37,7 +42,7 @@ class Response implements Responsable
         ],
         LaravelResponse::HTTP_UNPROCESSABLE_ENTITY => [
             self::CODE_ERROR_INVALID_DATA,
-            self::CODE_ERROR_RESOURCE_NOT_FOUND
+            self::CODE_ERROR_RESOURCE_NOT_FOUND,
         ],
         LaravelResponse::HTTP_SERVICE_UNAVAILABLE => [
             self::CODE_UNDEFINED_RESPONSE
@@ -46,7 +51,7 @@ class Response implements Responsable
           self::CODE_ERROR_ROUTE_NOT_FOUND
         ],
         LaravelResponse::HTTP_INTERNAL_SERVER_ERROR => [
-
+            self::CODE_ERROR_DATABASE_TRANSACTION
         ]
     ];
 

@@ -15,6 +15,7 @@ class CreateSayembaraDetailTable extends Migration
     {
         Schema::create('sayembara_details', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('sayembara_id');
             $table->bigInteger('province_id');
             $table->bigInteger('city_id');
             $table->bigInteger('district_id')->nullable();
@@ -30,7 +31,11 @@ class CreateSayembaraDetailTable extends Migration
             $table->json('limit')->nullable();
             $table->timestamps();
             $table->foreign('thumbnail')->references('id')->on('attachments')->cascadeOnDelete();
-
+            $table->foreign('sayembara_id')->references('id')->on('sayembaras')->cascadeOnDelete();
+            $table->foreign('province_id')->references('id')->on('provinces')->nullOnDelete();
+            $table->foreign('city_id')->references('id')->on('cities')->nullOnDelete();
+            $table->foreign('district_id')->references('id')->on('districts')->nullOnDelete();
+            $table->foreign('sub_district_id')->references('id')->on('sub_districts')->nullOnDelete();
         });
     }
 

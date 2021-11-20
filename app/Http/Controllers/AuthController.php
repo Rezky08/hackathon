@@ -18,7 +18,7 @@ class AuthController extends Controller
     public function store(Request $request){
         $job = new CreateNewUser($request->all());
         $this->dispatch($job);
-        return new Response(Response::CODE_SUCCESS);
+        return new Response(Response::CODE_DATA_CREATED);
     }
 
     public function login(Request $request){
