@@ -70,7 +70,7 @@ class CreateNewParticipant
             })]
         ])->validate();
 
-        throw_if($this->sayembara->user->id == $this->user->id,Error::make(Response::CODE_ERROR_INVALID_SAYEMBARA_PARTICIPANT));
+        throw_if($this->sayembara->user->id == $this->user->id,Error::make(Response::CODE_ERROR_FORBIDDEN_SAYEMBARA_JOIN));
 
 
     }

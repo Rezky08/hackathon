@@ -65,5 +65,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
         'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
+        'validate.owner' => \App\Http\Middleware\ValidateSayembaraOwner::class,
+        'validate.participant' => \App\Http\Middleware\ValidateSayembaraParticipant::class
     ];
 }

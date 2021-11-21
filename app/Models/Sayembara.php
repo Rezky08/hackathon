@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\LimitCast;
 use App\Models\Sayembara\Detail;
+use App\Models\Sayembara\Participant;
 use App\Traits\ColumnListing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Date;
  * @property boolean $is_open
  * @property Date $start_date
  * @property Date $end_date
+ * @property Participant $participants
  *
  */
 class Sayembara extends Model
@@ -33,6 +35,9 @@ class Sayembara extends Model
     }
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
+    }
+    public function participants(){
+        return $this->hasMany(Participant::class,'sayembara_id','id');
     }
 
 }

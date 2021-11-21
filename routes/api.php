@@ -28,29 +28,47 @@ Route::middleware(['auth:sanctum'])->group(function (){
 
     Route::group(['prefix'=>'sayembara'],function (){
 
+        /** sayembara participant */
+        Route::group(['prefix'=>'{sayembara_id}'],function () {
+            Route::group(['prefix'=>'join'],function (){
+                Route::post("/",[\App\Http\Controllers\Sayembara\ParticipantController::class,'joinSayembara']);
+            });
+
+            Route::middleware('validate.participant')->group(function (){
+                Route::group(['prefix'=>'out'],function (){
+                    Route::post("/",[\App\Http\Controllers\Sayembara\ParticipantController::class,'outSayembara']);
+                });
+
+                Route::group(['prefix'=>'present'],function (){
+                    Route::post("/receive",[\App\Http\Controllers\Sayembara\ParticipantController::class,'receiveSayembaraPresent']);
+                });
+            });
+
+        });
+        /** end sayembara participant */
+
+        /** sayembara owner */
         Route::post('/',[\App\Http\Controllers\Sayembara\SayembaraController::class,'createNewSayembara']);
-        Route::put('/{sayembara_id}',[\App\Http\Controllers\Sayembara\SayembaraController::class,'updateExistingSayembara']);
-        Route::delete('/{sayembara_id}',[\App\Http\Controllers\Sayembara\SayembaraController::class,'deleteExistingSayembara']);
 
-        Route::group(['prefix'=>'{sayembara_id}/join'],function (){
-            Route::post("/",[\App\Http\Controllers\Sayembara\ParticipantController::class,'joinSayembara']);
-        });
+        Route::group(['prefix'=>'{sayembara_id}','middleware'=>['validate.owner']],function (){
+            Route::put('/',[\App\Http\Controllers\Sayembara\SayembaraController::class,'updateExistingSayembara']);
+            Route::delete('/',[\App\Http\Controllers\Sayembara\SayembaraController::class,'deleteExistingSayembara']);
 
-        Route::group(['prefix'=>'{sayembara_id}/out'],function (){
-            Route::post("/",[\App\Http\Controllers\Sayembara\ParticipantController::class,'outSayembara']);
-        });
+            Route::group(['prefix'=>'verify'],function (){
+                Route::post("/{participant_id}",[\App\Http\Controllers\Sayembara\SayembaraController::class,'verifyParticipantTask']);
+            });
 
-        Route::group(['prefix'=>'{sayembara_id}/verify'],function (){
-            Route::post("/{participant_id}",[\App\Http\Controllers\Sayembara\SayembaraController::class,'verifyParticipantTask']);
-        });
+            Route::group(['prefix'=>'win'],function (){
+                Route::post("/{participant_id}",[\App\Http\Controllers\Sayembara\SayembaraController::class,'setParticipantAsWinner']);
+            });
 
-        Route::group(['prefix'=>'{sayembara_id}/win'],function (){
-            Route::post("/{participant_id}",[\App\Http\Controllers\Sayembara\SayembaraController::class,'setParticipantAsWinner']);
-        });
+            Route::group(['prefix'=>'status'],function (){
+                Route::put('/',[\App\Http\Controllers\Sayembara\SayembaraController::class,'setExistingSayembaraStatus']);
+            });
 
-        Route::group(['prefix'=>'{sayembara_id}/status'],function (){
-           Route::put('/',[\App\Http\Controllers\Sayembara\SayembaraController::class,'setExistingSayembaraStatus']);
         });
+        /** end sayembara owner */
+
 
         Route::group(['prefix'=>'category'],function (){
            Route::get('/',[\App\Http\Controllers\Sayembara\CategoryController::class,'index']);

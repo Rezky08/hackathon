@@ -43,8 +43,8 @@ class Participant extends Model
     public function sayembara(){
         return $this->belongsTo(Sayembara::class,'sayembara_id','id');
     }
-    public function winners(){
-        return $this->hasMany(Winner::class,'sayembara_participant_id','id');
+    public function winner(){
+        return $this->hasOne(Winner::class,'sayembara_participant_id','id');
     }
 
 }

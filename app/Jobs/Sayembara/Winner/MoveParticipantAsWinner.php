@@ -63,6 +63,7 @@ class MoveParticipantAsWinner
             'participant_id.unique'=>"participant ".$this->participant->user->name." already win"
         ])->validate();
 
+        throw_if(!$this->participant->task_is_verified,Error::make(Response::CODE_ERROR_INVALID_SAYEMBARA_WINNER));
         throw_if($this->sayembara->user->id !== $this->user->id,Error::make(Response::CODE_ERROR_INVALID_SAYEMBARA_OWNER));
         throw_if($this->sayembara->id != $this->participant->sayembara->id,Error::make(Response::CODE_ERROR_INVALID_SAYEMBARA_PARTICIPANT));
     }
@@ -75,7 +76,7 @@ class MoveParticipantAsWinner
     public function handle()
     {
         /** @var Sayembara\Winner $winner */
-        $winner = $this->participant->winners()->create();
+        $winner = $this->participant->winner()->create();
         $this->winner = $winner;
 
         if ($this->winner->exists){

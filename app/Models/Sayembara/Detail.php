@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property Sayembara $sayembara
+ * @property string $title
  */
 class Detail extends Model
 {

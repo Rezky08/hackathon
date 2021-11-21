@@ -75,6 +75,13 @@ class DeleteExistingParticipant
 
         $this->participant = $participant;
 
+        throw_if($this->participant->winner()->exists(),Error::make(Response::CODE_ERROR_FORBIDDEN_SAYEMBARA_OUT,[
+            'message'=>__(':name already win sayembara :title',[
+                'name' => $participant->user->name,
+                'title'=>$sayembara->detail->title
+            ])
+        ]));
+
     }
 
     /**
