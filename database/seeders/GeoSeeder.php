@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Date;
 class GeoSeeder extends Seeder
 {
     public function getDataPath($fileName){
-        return implode('\\',[__DIR__,"data",$fileName]);
+        return implode('/',[__DIR__,"data",$fileName]);
     }
 
     public function readCsvData($csvFile){
