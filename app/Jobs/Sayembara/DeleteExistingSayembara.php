@@ -29,6 +29,11 @@ class DeleteExistingSayembara
     public function __construct(Sayembara $sayembara)
     {
         $this->sayembara = $sayembara;
+        throw_if($this->sayembara->winners()->exists(),Error::make(Response::CODE_ERROR_FORBIDDEN_SAYEMBARA_DELETE,[
+            'message' => __("sayembara :title already have winner",[
+                'title' => $this->sayembara->detail->title
+            ])
+        ]));
     }
 
     /**

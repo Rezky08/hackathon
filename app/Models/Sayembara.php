@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Casts\LimitCast;
 use App\Models\Sayembara\Detail;
 use App\Models\Sayembara\Participant;
+use App\Models\Sayembara\Winner;
 use App\Traits\ColumnListing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -38,6 +39,10 @@ class Sayembara extends Model
     }
     public function participants(){
         return $this->hasMany(Participant::class,'sayembara_id','id');
+    }
+
+    public function winners(){
+        return $this->hasManyThrough(Winner::class,Participant::class,'sayembara_id','sayembara_participant_id','id','id');
     }
 
 }

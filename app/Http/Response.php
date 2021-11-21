@@ -33,6 +33,7 @@ class Response implements Responsable
 
     const CODE_ERROR_FORBIDDEN_SAYEMBARA_JOIN = '651';
     const CODE_ERROR_FORBIDDEN_SAYEMBARA_OUT = '652';
+    const CODE_ERROR_FORBIDDEN_SAYEMBARA_DELETE = '653';
 
 
     const CODE_UNDEFINED_RESPONSE = '999';
@@ -58,7 +59,8 @@ class Response implements Responsable
             self::CODE_ERROR_INVALID_SAYEMBARA_WINNER,
             self::CODE_ERROR_FORBIDDEN_SAYEMBARA_JOIN,
             self::CODE_ERROR_FORBIDDEN_SAYEMBARA_OUT,
-            self::CODE_ERROR_INVALID_SAYEMBARA_PRESENT_WAS_RECEIVED
+            self::CODE_ERROR_INVALID_SAYEMBARA_PRESENT_WAS_RECEIVED,
+            self::CODE_ERROR_FORBIDDEN_SAYEMBARA_DELETE
         ],
         LaravelResponse::HTTP_SERVICE_UNAVAILABLE => [
             self::CODE_UNDEFINED_RESPONSE
