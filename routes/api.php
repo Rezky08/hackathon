@@ -28,6 +28,8 @@ Route::middleware(['auth:sanctum'])->group(function (){
 
     Route::group(['prefix'=>'sayembara'],function (){
 
+        Route::get('/{sayembara_id?}',[\App\Http\Controllers\Sayembara\SayembaraController::class,'index']);
+
         /** sayembara participant */
         Route::group(['prefix'=>'{sayembara_id}'],function () {
             Route::group(['prefix'=>'join'],function (){
@@ -84,6 +86,10 @@ Route::middleware(['auth:sanctum'])->group(function (){
         Route::get('/city',[\App\Http\Controllers\Geo\CityController::class,'index']);
         Route::get('/district',[\App\Http\Controllers\Geo\DistrictController::class,'index']);
         Route::get('/subdistrict',[\App\Http\Controllers\Geo\SubDistrictController::class,'index']);
+    });
+
+    Route::group(['prefix'=>'attachment'],function (){
+       Route::post('/',[\App\Http\Controllers\AttachmentController::class,'store']);
     });
 
 });

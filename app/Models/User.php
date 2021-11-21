@@ -18,6 +18,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $remember_token
  * @property Date $created_at
  * @property Date $updated_at
+ * @property Attachment $attachments
  */
 class User extends Authenticatable
 {
@@ -59,5 +60,12 @@ class User extends Authenticatable
     public function setPasswordAttribute($value)
     {
        $this->attributes['password'] = bcrypt($value);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function attachments(){
+        return $this->hasMany(Attachment::class,'user_id','id');
     }
 }

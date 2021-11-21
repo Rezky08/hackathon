@@ -4,6 +4,7 @@ namespace App\Http;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response as LaravelResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -18,6 +19,7 @@ class Response implements Responsable
 
     const CODE_ERROR = '300';
     const CODE_ERROR_INVALID_DATA = '301';
+    const CODE_ERROR_INVALID_FILE = '302';
 
     const CODE_ERROR_UNAUTHORIZED = '402';
     const CODE_ERROR_UNAUTHENTICATED = '403';
@@ -60,7 +62,8 @@ class Response implements Responsable
             self::CODE_ERROR_FORBIDDEN_SAYEMBARA_JOIN,
             self::CODE_ERROR_FORBIDDEN_SAYEMBARA_OUT,
             self::CODE_ERROR_INVALID_SAYEMBARA_PRESENT_WAS_RECEIVED,
-            self::CODE_ERROR_FORBIDDEN_SAYEMBARA_DELETE
+            self::CODE_ERROR_FORBIDDEN_SAYEMBARA_DELETE,
+            self::CODE_ERROR_INVALID_FILE
         ],
         LaravelResponse::HTTP_SERVICE_UNAVAILABLE => [
             self::CODE_UNDEFINED_RESPONSE
@@ -172,8 +175,27 @@ class Response implements Responsable
                 break;
             case $data instanceof JsonResource:
                 /** @var JsonResource $data */
-                $data = $data->response();
-                $response['data'] = $data->getData(true);
+                if ($data->resource instanceof LengthAwarePaginator){
+                    /** @var LengthAwarePaginator $resource */
+                    $resource = $data->resource;
+                    $paginationOptions = [
+                        'last_item' => $resource->lastItem(),
+                        'total_item' => $resource->total(),
+                        'page' => $resource->currentPage(),
+                        'has_next_page' => $resource->hasMorePages(),
+                        'total_page' => $resource->lastPage(),
+                        'per_page' => (int) $resource->perPage(),
+                    ];
+                    $response['paginator'] = $paginationOptions;
+
+                    /** @var Collection $resource */
+                    $resource = $resource->getCollection();
+                    $response['data']=$resource->toArray();
+                }else{
+                    $data = $data->response();
+                    $response['data'] = $data->getData(true);
+                }
+                break;
         }
 
         return $response;

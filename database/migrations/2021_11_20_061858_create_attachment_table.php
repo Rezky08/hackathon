@@ -16,6 +16,7 @@ class CreateAttachmentTable extends Migration
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
+            $table->nullableMorphs('attachable');
             $table->string('path');
             $table->string('type');
             $table->integer('size')->comment('in Kb');

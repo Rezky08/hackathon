@@ -4,6 +4,7 @@ namespace App\Jobs\Sayembara\Detail;
 
 use App\Exceptions\Error;
 use App\Http\Response;
+use App\Jobs\Attachment\CreateNewAttachment;
 use App\Models\Sayembara;
 use App\Models\Sayembara\Detail;
 use Illuminate\Bus\Queueable;
@@ -12,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -29,6 +31,9 @@ class CreateNewDetailSayembara
     public array $rules;
 
     public Sayembara $sayembara;
+
+    public Detail $sayembaraDetail;
+
 
 
     /**
@@ -80,10 +85,11 @@ class CreateNewDetailSayembara
         }
         /** end value mapping */
 
-
         $availableColumns = Detail::getTableColumns();
         $dataInsertSayembaraDetail = collect($this->attributes)->only($availableColumns);
-        $this->sayembara->detail()->create($dataInsertSayembaraDetail->toArray());
+        /** @var Detail $sayembaraDetail */
+        $sayembaraDetail = $this->sayembara->detail()->create($dataInsertSayembaraDetail->toArray());
+        $this->sayembaraDetail = $sayembaraDetail;
 
         throw_if(!$this->sayembara->detail->exists,Error::make(Response::CODE_ERROR_DATABASE_TRANSACTION));
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Sayembara;
 
+use App\Helpers\SayembaraHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SayembaraResource;
 use App\Http\Response;
@@ -12,12 +13,25 @@ use App\Jobs\Sayembara\SetSayembaraIsOpen;
 use App\Jobs\Sayembara\UpdateExistingSayembara;
 use App\Jobs\Sayembara\Winner\MoveParticipantAsWinner;
 use App\Models\Sayembara;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class SayembaraController extends Controller
 {
+    protected Builder $query;
+
+    public function __construct()
+    {
+        $this->query = Sayembara::query();
+    }
+
+    public function index(Request $request){
+        $request->whenHas('name',fn($value)=>SayembaraHelper::searchByName($this->query,$value));
+        return new Response(Response::CODE_SUCCESS,SayembaraResource::collection($this->paginate($request,$this->query)));
+    }
+
     public function createNewSayembara(Request $request){
         $job = new CreateNewSayembara($request->all());
         $this->dispatch($job);

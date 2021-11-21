@@ -3,6 +3,7 @@
 namespace App\Models\Sayembara;
 
 use App\Casts\LimitCast;
+use App\Models\Attachment;
 use App\Models\Sayembara;
 use App\Traits\ColumnListing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -75,5 +76,9 @@ class Detail extends Model
 
     public function sayembara(){
         $this->belongsTo(Sayembara::class,'sayembara_id','id');
+    }
+
+    public function thumbnail(){
+        return $this->morphOne(Attachment::class,'attachable');
     }
 }

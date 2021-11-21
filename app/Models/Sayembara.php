@@ -45,4 +45,8 @@ class Sayembara extends Model
         return $this->hasManyThrough(Winner::class,Participant::class,'sayembara_id','sayembara_participant_id','id','id');
     }
 
+    public function attachments(){
+        return $this->morphMany(Attachment::class,'attachable');
+    }
+
 }
