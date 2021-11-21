@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App\Http\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Response as LaravelResponse;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -70,6 +71,9 @@ class Handler extends ExceptionHandler
 
         if ($request->expectsJson()){
             switch (true){
+                case $e instanceof QueryException:
+                    $e = Error::make(Response::CODE_ERROR,$e->errors());
+                    break;
                 case $e instanceof ValidationException:
                     $e = Error::make(Response::CODE_ERROR_INVALID_DATA,$e->errors());
                     break;
