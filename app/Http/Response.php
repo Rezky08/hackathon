@@ -26,6 +26,10 @@ class Response implements Responsable
     const CODE_ERROR_RESOURCE_NOT_FOUND = '504';
     const CODE_ERROR_DATABASE_TRANSACTION = '505';
 
+    const CODE_ERROR_INVALID_SAYEMBARA_OWNER = '601';
+    const CODE_ERROR_INVALID_SAYEMBARA_PARTICIPANT = '602';
+
+
     const CODE_UNDEFINED_RESPONSE = '999';
 
     const RESPONSE_GROUP = [
@@ -44,6 +48,8 @@ class Response implements Responsable
         LaravelResponse::HTTP_UNPROCESSABLE_ENTITY => [
             self::CODE_ERROR_INVALID_DATA,
             self::CODE_ERROR_RESOURCE_NOT_FOUND,
+            self::CODE_ERROR_INVALID_SAYEMBARA_OWNER,
+            self::CODE_ERROR_INVALID_SAYEMBARA_PARTICIPANT
         ],
         LaravelResponse::HTTP_SERVICE_UNAVAILABLE => [
             self::CODE_UNDEFINED_RESPONSE

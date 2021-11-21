@@ -10,10 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Date;
 
 /**
- * @property Detail $detail;
- * @property boolean $is_open;
- * @property Date $start_date;
- * @property Date $end_date;
+ * @property int $id
+ * @property User $user
+ * @property Detail $detail
+ * @property boolean $is_open
+ * @property Date $start_date
+ * @property Date $end_date
  *
  */
 class Sayembara extends Model
@@ -28,6 +30,9 @@ class Sayembara extends Model
 
     public function detail(){
         return $this->hasOne(Detail::class,'sayembara_id','id');
+    }
+    public function user(){
+        return $this->belongsTo(User::class,'user_id','id');
     }
 
 }

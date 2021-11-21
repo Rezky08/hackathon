@@ -49,6 +49,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
 
             Route::bind('sayembara_id',fn($value)=>Sayembara::query()->findOrFail($value));
+            Route::bind('participant_id',fn($value)=>Sayembara\Participant::query()->findOrFail($value));
         });
     }
 
