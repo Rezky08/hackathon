@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property Participant $participant
+ * @property bool $present_is_received;
  */
 class Winner extends Model
 {

@@ -2,11 +2,13 @@
 
 namespace App\Jobs\Sayembara\Participant;
 
+use App\Events\Sayembara\PresentWasReceivedByWinner;
 use App\Exceptions\Error;
 use App\Http\Response;
 use App\Models\Sayembara;
 use App\Models\Sayembara\Participant;
 use App\Models\User;
+use Dflydev\DotAccessData\Data;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -57,19 +59,27 @@ class SetPresentIsReceived
         ])->first();
 
         $this->participant = $participant;
-        dd(!$this->participant->winner()->exists());
         throw_if(!$this->participant->exists,Error::make(Response::CODE_ERROR_INVALID_SAYEMBARA_PARTICIPANT));
-        throw_if(!$this->participant->winner()->exists(),Error::make(Response::CODE_ERROR_INVALID_SAYEMBARA_PARTICIPANT));
+        throw_if(!$this->participant->winner()->exists(),Error::make(Response::CODE_ERROR_INVALID_SAYEMBARA_WINNER));
+        throw_if($this->participant->winner()->getQuery()->where('present_is_received',true)->exists(),Error::make(Response::CODE_ERROR_INVALID_SAYEMBARA_PRESENT_WAS_RECEIVED));
 
     }
 
     /**
      * Execute the job.
      *
-     * @return void
+     * @return bool
      */
     public function handle()
     {
-        //
+        /** @var Sayembara\Winner $winner */
+        $winner = $this->participant->winner()->first();
+        $this->winner = $winner;
+        $this->winner->present_is_received = true;
+        if ($this->winner->save()){
+            event(new PresentWasReceivedByWinner($this->winner));
+        }
+
+        return $this->winner->present_is_received;
     }
 }
