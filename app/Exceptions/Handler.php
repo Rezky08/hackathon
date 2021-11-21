@@ -72,7 +72,8 @@ class Handler extends ExceptionHandler
         if ($request->expectsJson()){
             switch (true){
                 case $e instanceof QueryException:
-                    $e = Error::make(Response::CODE_ERROR,$e->errors());
+                    /** @var QueryException $e */
+                    $e = Error::make(Response::CODE_ERROR,$data);
                     break;
                 case $e instanceof ValidationException:
                     $e = Error::make(Response::CODE_ERROR_INVALID_DATA,$e->errors());
