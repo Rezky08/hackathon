@@ -28,6 +28,13 @@ Route::middleware(['auth:sanctum'])->group(function (){
 
     Route::group(['prefix'=>'sayembara'],function (){
 
+        Route::group(['prefix'=>'category'],function (){
+            Route::get('/',[\App\Http\Controllers\Sayembara\CategoryController::class,'index']);
+        });
+
+        Route::group(['prefix'=>'present'],function (){
+            Route::get('type',[\App\Http\Controllers\Sayembara\PresentController::class,'getPresentType']);
+        });
         Route::get('/{sayembara_id?}',[\App\Http\Controllers\Sayembara\SayembaraController::class,'index']);
 
         /** sayembara participant */
@@ -71,14 +78,6 @@ Route::middleware(['auth:sanctum'])->group(function (){
         });
         /** end sayembara owner */
 
-
-        Route::group(['prefix'=>'category'],function (){
-           Route::get('/',[\App\Http\Controllers\Sayembara\CategoryController::class,'index']);
-        });
-
-        Route::group(['prefix'=>'present'],function (){
-            Route::get('type',[\App\Http\Controllers\Sayembara\PresentController::class,'getPresentType']);
-        });
     });
 
     Route::group(['prefix'=>'geo'],function (){

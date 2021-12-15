@@ -21,6 +21,7 @@ class ProvinceController extends Controller
 
     public function index(Request $request){
         $request->whenHas('name',fn($value)=>  GeoHelper::searchByName($this->query,$value));
+        $request->whenHas('id',fn($value)=>  GeoHelper::searchById($this->query,$value,Province::class));
         return new Response(Response::CODE_SUCCESS,$this->paginate($request,$this->query));
     }
 }

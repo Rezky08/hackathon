@@ -25,9 +25,10 @@ class DistrictController extends Controller
      */
     public function index(Request $request){
 
-        $request->whenHas('province',fn($value)=>GeoHelper::searchByProvince($this->query,$value));
         $request->whenHas('city',fn($value)=>GeoHelper::searchByCity($this->query,$value));
+        $request->whenHas('city_id',fn($value)=>GeoHelper::searchByCity($this->query,$value,true));
         $request->whenHas('name',fn($value)=>GeoHelper::searchByName($this->query,$value));
+        $request->whenHas('id',fn($value)=>GeoHelper::searchById($this->query,$value,District::class));
 
         return new Response(Response::CODE_SUCCESS,$this->paginate($request,$this->query));
     }
