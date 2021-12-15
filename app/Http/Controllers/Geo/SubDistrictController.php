@@ -27,8 +27,11 @@ class SubDistrictController extends Controller
      */
     public function index(Request $request){
 
+
+        $request->whenHas('province',fn($value)=>GeoHelper::searchByProvince($this->query,$value));
+        $request->whenHas('province_id',fn($value)=>GeoHelper::searchByProvince($this->query,$value,true));
         $request->whenHas('district',fn($value)=>GeoHelper::searchByDistrict($this->query,$value));
-        $request->whenHas('district_id',fn($value)=>GeoHelper::searchByDistrict($this->query,$value,District::class));
+        $request->whenHas('district_id',fn($value)=>GeoHelper::searchByDistrict($this->query,$value,true));
         $request->whenHas('name',fn($value)=>GeoHelper::searchByName($this->query,$value));
         $request->whenHas('id',fn($value)=>GeoHelper::searchById($this->query,$value,SubDistrict::class));
 

@@ -103,12 +103,14 @@ class GeoSeeder extends Seeder
                 if (!$value){
                     continue;
                 }
+                /** @var City $city */
+                $city = City::query()->findOrFail($value[2]);
                 $dataInsert=[
                     'id'=> $value[0],
                     'name' =>$value[1],
-                    'city_id'=>$value[2]
+                    'city_id'=>$city->id,
+                    'province_id'=>$city->province_id,
                 ];
-                City::query()->findOrFail($dataInsert['city_id']);
                 District::query()->firstOrCreate($dataInsert);
             }catch (\Exception $e){
                 $this->command->error('Error : '.$e->getMessage());
@@ -133,13 +135,16 @@ class GeoSeeder extends Seeder
                 if (!$value){
                     continue;
                 }
+                $district_id = str_replace(';','',$value[2]);
+                /** @var District $district */
+                $district = District::query()->findOrFail($district_id);
                 $dataInsert=[
                     'id'=> $value[0],
                     'name' =>$value[1],
-                    'district_id'=>str_replace(';','',$value[2])
+                    'district_id'=>$district->id,
+                    'city_id'=>$district->city_id,
+                    'province_id'=>$district->province_id,
                 ];
-
-                District::query()->findOrFail($dataInsert['district_id']);
                 SubDistrict::query()->firstOrCreate($dataInsert);
             }catch (\Exception $e){
                 $this->command->error('Error : '.$e->getMessage());

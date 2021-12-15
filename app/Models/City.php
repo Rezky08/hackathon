@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property integer $id
+ * @property integer $province_id
+ */
 class City extends Model
 {
     use HasFactory;
@@ -28,4 +32,5 @@ class City extends Model
     {
         return $this->belongsTo(Province::class,'province_id','id');
     }
+
 }
