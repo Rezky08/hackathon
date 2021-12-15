@@ -32,6 +32,10 @@ class SayembaraController extends Controller
         return new Response(Response::CODE_SUCCESS,SayembaraResource::collection($this->paginate($request,$this->query)));
     }
 
+    public function show(Request $request,Sayembara $sayembara){
+        return new Response(Response::CODE_SUCCESS,SayembaraResource::make($sayembara));
+    }
+
     public function createNewSayembara(Request $request){
         $job = new CreateNewSayembara($request->all());
         $this->dispatch($job);

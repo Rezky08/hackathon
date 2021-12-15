@@ -35,7 +35,8 @@ Route::middleware(['auth:sanctum'])->group(function (){
         Route::group(['prefix'=>'present'],function (){
             Route::get('type',[\App\Http\Controllers\Sayembara\PresentController::class,'getPresentType']);
         });
-        Route::get('/{sayembara_id?}',[\App\Http\Controllers\Sayembara\SayembaraController::class,'index']);
+        Route::get('/',[\App\Http\Controllers\Sayembara\SayembaraController::class,'index']);
+        Route::get('/{sayembara_id}',[\App\Http\Controllers\Sayembara\SayembaraController::class,'show']);
 
         /** sayembara participant */
         Route::group(['prefix'=>'{sayembara_id}'],function () {
